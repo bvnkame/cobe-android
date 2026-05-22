@@ -1,0 +1,17 @@
+# Built artifacts
+build/
+.gradle/
+*.apk
+*.aab
+*.iml
+
+# Local environment
+local.properties
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

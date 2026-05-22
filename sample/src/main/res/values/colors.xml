@@ -1,0 +1,7 @@
+<resources>
+    <color name="panel_bg">#D9FFFFFF</color>
+    <color name="panel_border">#33000000</color>
+    <color name="menu_bg">#8CFFFFFF</color>
+    <color name="inspector_bg">#B8000000</color>
+    <color name="accent_purple">#9C27B0</color>
+</resources>

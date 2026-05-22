@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fitsSystemWindows="true">
+
+    <com.cobe.CobeView
+        android:id="@+id/cobe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Top center dropdown -->
+    <Button
+        android:id="@+id/menuButton"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_menu"
+        android:paddingHorizontal="14dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#222"
+        android:stateListAnimator="@null"
+        android:text="Emoji ▾" />
+
+    <!-- Top right inspector toggle -->
+    <Button
+        android:id="@+id/inspectorToggle"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/bg_menu"
+        android:text="i"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#666"
+        android:stateListAnimator="@null"
+        android:padding="0dp" />
+
+    <!-- Top left inspector -->
+    <LinearLayout
+        android:id="@+id/inspector"
+        android:layout_width="118dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginTop="52dp"
+        android:layout_marginStart="12dp"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:background="@drawable/bg_inspector">
+        <TextView
+            android:id="@+id/fpsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-- fps"
+            android:textColor="#3DDC84"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:fontFamily="monospace" />
+        <TextView
+            android:id="@+id/perfLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="frame -- ms"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:fontFamily="monospace" />
+        <TextView
+            android:id="@+id/perfLabel2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M:0  A:0"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:fontFamily="monospace" />
+    </LinearLayout>
+
+    <!-- Bottom panel -->
+    <LinearLayout
+        android:id="@+id/panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="12dp"
+        android:orientation="vertical"
+        android:padding="14dp"
+        android:background="@drawable/bg_panel">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="drag = rotate · tap = pause · pinch = zoom"
+            android:textSize="11sp"
+            android:textColor="#888"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp">
+            <TextView
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:text="Zoom"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+            <SeekBar
+                android:id="@+id/zoomSeek"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="1000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+            <TextView
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:text="Map"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+            <SeekBar
+                android:id="@+id/brightSeek"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="1000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+            <TextView
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:text="Marker"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+            <SeekBar
+                android:id="@+id/sizeSeek"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="1000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Spin"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+            <Switch
+                android:id="@+id/spinSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:layout_marginStart="4dp" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3D"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+            <Switch
+                android:id="@+id/depthSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+            <TextView
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:text="Stress"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/accent_purple" />
+            <SeekBar
+                android:id="@+id/stressSeek"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="500" />
+            <TextView
+                android:id="@+id/stressCountLabel"
+                android:layout_width="38dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/accent_purple"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:fontFamily="monospace"
+                android:gravity="end" />
+            <Button
+                android:id="@+id/resetButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset"
+                android:textColor="@color/accent_purple"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_reset"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:layout_marginStart="6dp"
+                android:stateListAnimator="@null" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,108 @@
+name: Release APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Override tag for the release (e.g. v0.1.0)'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & publish APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Resolve tag
+        id: tag
+        run: |
+          if [ -n "${{ inputs.tag }}" ]; then
+            echo "name=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build debug APK (sample)
+        run: ./gradlew :sample:assembleDebug --no-daemon --stacktrace
+
+      - name: Build release APK (sample, unsigned)
+        run: ./gradlew :sample:assembleRelease --no-daemon --stacktrace || true
+
+      - name: Build library AAR
+        run: ./gradlew :cobe:assembleRelease --no-daemon --stacktrace
+
+      - name: Stage artifacts
+        run: |
+          mkdir -p dist
+          TAG="${{ steps.tag.outputs.name }}"
+          cp sample/build/outputs/apk/debug/sample-debug.apk "dist/cobe-sample-${TAG}-debug.apk"
+          if [ -f sample/build/outputs/apk/release/sample-release-unsigned.apk ]; then
+            cp sample/build/outputs/apk/release/sample-release-unsigned.apk "dist/cobe-sample-${TAG}-release-unsigned.apk"
+          fi
+          if [ -f cobe/build/outputs/aar/cobe-release.aar ]; then
+            cp cobe/build/outputs/aar/cobe-release.aar "dist/cobe-${TAG}.aar"
+          fi
+          ls -la dist
+
+      - name: Upload artifacts to workflow
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobe-${{ steps.tag.outputs.name }}
+          path: dist/*
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          name: ${{ steps.tag.outputs.name }}
+          generate_release_notes: true
+          files: dist/*
+          body: |
+            ## Cobe Android · ${{ steps.tag.outputs.name }}
+
+            Lightweight Kotlin/OpenGL ES 3.0 port of [shuding/cobe](https://github.com/shuding/cobe).
+
+            ### Artifacts
+            - **`cobe-sample-*-debug.apk`** — installable demo APK (debug-signed)
+            - **`cobe-sample-*-release-unsigned.apk`** — release APK, sign with your own keystore before distribution
+            - **`cobe-*.aar`** — library artifact for direct dependency consumption
+
+            ### Install on device
+            ```bash
+            adb install cobe-sample-${{ steps.tag.outputs.name }}-debug.apk
+            ```
+
+            See [README](https://github.com/${{ github.repository }}#readme) for usage.
